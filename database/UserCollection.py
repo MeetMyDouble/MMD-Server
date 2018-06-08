@@ -27,3 +27,10 @@ class UserCollection:
         if jsonUser is not None:
             return UserDbObject(jsonUser)
         return None
+
+    def find_user_with_token(self, token):
+        jsonUser = self.userCollection.find_one({'token': token})
+
+        if jsonUser is not None:
+            return UserDbObject(jsonUser)
+        return None

@@ -34,7 +34,7 @@ databaseManager = Database()
 def startFlask():
     print("démarrage du serveur flask")
     app.run(
-        '127.0.0.1',
+        '192.168.0.103',
         5445
     )
 
@@ -57,7 +57,7 @@ def main():
     user.password = "azerty"
     user.firstName = "Rémy"
 
-    databaseManager.userCollection.create_user(user)
+    #databaseManager.userCollection.create_user(user)
 
 
     #Process(target=startSlave, kwargs=dict(port="6500")).start()
@@ -65,7 +65,7 @@ def main():
     #Process(target=startSlave, kwargs=dict(port="6502")).start()
     #Process(target=startSlave, kwargs=dict(port="6503")).start()
 
-    #startFlask()
+    startFlask()
 
 
 

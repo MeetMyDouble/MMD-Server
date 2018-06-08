@@ -2,9 +2,13 @@ from flask import render_template, request, jsonify
 from flaskApi import app
 from runServer import  indexManager
 import face_recognition
+from runServer import databaseManager
 import threading
 import time
 import os
+from misc.ResponseObject import ResponseObject
+import misc.ResponseCodes as ResponseCodes
+from misc.Crypto import comparePassword
 
 
 
@@ -65,13 +69,48 @@ def submit_picture():
     return "OK"
 
 
-
-
 @app.route('/look_for_sosie')
 def look_for_sosie():
     return render_template(
         'look_for_sosie.html'
     )
+
+
+@app.route('/authToken', methods=['POST'])
+def auth_token():
+    jsonContent = request.get_json()
+    token = jsonContent['token']
+
+    user = databaseManager.userCollection.find_user_with_token(token)
+
+    if user is None:
+        return ResponseObject(ResponseCodes.BAD_CREDENTIALS).toJson()
+
+    return ResponseObject(ResponseCodes.OK).toJson()
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    jsonContent = request.get_json()
+    email = jsonContent["email"]
+    password = jsonContent['password']
+
+    user = databaseManager.userCollection.find_user_with_email(email)
+
+    if user is None:
+        return ResponseObject(ResponseCodes.USER_DONT_EXISTS).toJson()
+
+    hashedPass = user.password
+
+    result = comparePassword(password, hashedPass)
+
+    if result:
+        print("tout est bon")
+        return ResponseObject(ResponseCodes.OK).add_arg("token", user.token).toJson()
+
+    return ResponseObject(ResponseCodes.BAD_CREDENTIALS).toJson()
+
+
 
 @app.route("/submit_look_for_sosie", methods=['POST'])
 def submit_look_for_sosie():
