@@ -16,23 +16,7 @@ from misc.Crypto import comparePassword
 @app.route('/')
 @app.route('/home')
 def home():
-    picture_of_me = face_recognition.load_image_file("pictures/pic1.jpg")
-    my_face_encoding = face_recognition.face_encodings(picture_of_me)[0]
-
-    unknown_picture = face_recognition.load_image_file("pictures/pic2.jpg")
-    unknown_face_encoding = face_recognition.face_encodings(unknown_picture)[0]
-
-
-
-    # Now we can see the two face encodings are of the same person with `compare_faces`!
-
-    results = face_recognition.compare_faces([my_face_encoding], unknown_face_encoding)
-
-    if results[0] == True:
-        print("It's a picture of me!")
-    else:
-        print("It's not a picture of me!")
-    return "toto"
+    return "Hello world"
 
 
 
@@ -91,6 +75,7 @@ def auth_token():
 
 @app.route('/login', methods=['POST'])
 def login():
+    print("On entre dans le login")
     jsonContent = request.get_json()
     email = jsonContent["email"]
     password = jsonContent['password']

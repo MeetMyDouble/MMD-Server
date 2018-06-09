@@ -35,7 +35,7 @@ def startFlask():
     print("démarrage du serveur flask")
     app.run(
         '192.168.0.103',
-        5445
+        5450
     )
 
 
